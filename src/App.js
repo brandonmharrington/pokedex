@@ -26,6 +26,33 @@ const App = () => {
     }
   };
 
+  // const randomInt = (min, max) => {
+  //   min = Math.ceil(min);
+  //   max = Math.floor(max);
+  //   return Math.floor(Math.random() * (max - min + 1)) + min;
+  // };
+
+  // const getRandom = async function () {
+  //   const toArray = [];
+  //   const random = randomInt(1, 898);
+  //   console.log(random);
+  //   console.log(Names[random]);
+  //   try {
+  //     const url = `https://pokeapi.co/api/v2/pokemon/${Names[random]}`;
+  //     const res = await fetch(url);
+  //     const data = await res.json();
+  //     toArray.push(data);
+  //     setPokemonType(
+  //       `${data.types[0].type.name[0].toUpperCase()}${data.types[0].type.name.slice(
+  //         1
+  //       )}`
+  //     );
+  //     setPokemonData(toArray);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
   const handleChange = e => {
     setPokemon(e.target.value.toLowerCase());
   };
@@ -35,15 +62,10 @@ const App = () => {
     getPokemon();
   };
 
-  // const randomInt = (min, max) => {
-  //   min = Math.ceil(min);
-  //   max = Math.floor(max);
-  //   return Math.floor(Math.random() * (max - min + 1)) + min;
-  // };
-
   // const handleClick = e => {
-  //   const random = randomInt(1, 898);
-  //   console.log(random);
+  //   // const random = randomInt(1, 898);
+  //   // console.log(Names[random]);
+  //   getRandom();
   // };
 
   return (
