@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Pagination from './Pagination';
 import './App.css';
 
 const App = () => {
@@ -6,6 +7,7 @@ const App = () => {
   const [pokemon, setPokemon] = useState('');
   const [pokemonData, setPokemonData] = useState([]);
   const [pokemonType, setPokemonType] = useState([]);
+  const [currentId, setCurrentId] = useState('');
 
   const getPokemon = async function () {
     const toArray = [];
@@ -18,6 +20,7 @@ const App = () => {
       data.types.forEach(type => pokemonTypes.push(type.type.name));
       setPokemonType(pokemonTypes);
       setPokemonData(toArray);
+      setCurrentId(toArray[0].id);
     } catch (err) {
       alert(
         "We couldn't find that Pokémon. Make sure you don't have any typos and try again!"
@@ -48,9 +51,10 @@ const App = () => {
       for (let i = 0; i < data.results.length; i++) {
         pokemonNames[i] = data.results[i].name;
       }
-
       // fetch a random pokemon from pokemonNames
-      const url2 = `https://pokeapi.co/api/v2/pokemon/${pokemonNames[random]}`;
+      const url2 = `https://pokeapi.co/api/v2/pokemon/${
+        pokemonNames[random - 1]
+      }`;
       const res2 = await fetch(url2);
       const data2 = await res2.json();
 
@@ -58,6 +62,69 @@ const App = () => {
       data2.types.forEach(type => pokemonTypes.push(type.type.name));
       setPokemonType(pokemonTypes);
       setPokemonData(toArray);
+      setCurrentId(toArray[0].id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getNextPokemon = async function () {
+    const pokemonTypes = [];
+    const toArray = [];
+    try {
+      // fetch a list of all pokemon
+      const url = 'https://pokeapi.co/api/v2/pokemon?limit=1000';
+      const fetchPro = fetch(url);
+      const res = await fetchPro;
+      const data = await res.json();
+
+      // push all pokemon to pokemonNames with an id
+      for (let i = 0; i < data.results.length; i++) {
+        pokemonNames[i] = data.results[i].name;
+      }
+
+      // fetch the next pokemon from pokemonNames based on current id
+      const url2 = `https://pokeapi.co/api/v2/pokemon/${pokemonNames[currentId]}`;
+      const res2 = await fetch(url2);
+      const data2 = await res2.json();
+
+      toArray.push(data2);
+      data2.types.forEach(type => pokemonTypes.push(type.type.name));
+      setPokemonType(pokemonTypes);
+      setPokemonData(toArray);
+      setCurrentId(toArray[0].id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getPrevPokemon = async function () {
+    const pokemonTypes = [];
+    const toArray = [];
+    try {
+      // fetch a list of all pokemon
+      const url = 'https://pokeapi.co/api/v2/pokemon?limit=1000';
+      const fetchPro = fetch(url);
+      const res = await fetchPro;
+      const data = await res.json();
+
+      // push all pokemon to pokemonNames with an id
+      for (let i = 0; i < data.results.length; i++) {
+        pokemonNames[i] = data.results[i].name;
+      }
+
+      // fetch the previous pokemon from pokemonNames based on current id
+      const url2 = `https://pokeapi.co/api/v2/pokemon/${
+        pokemonNames[currentId - 2]
+      }`;
+      const res2 = await fetch(url2);
+      const data2 = await res2.json();
+
+      toArray.push(data2);
+      data2.types.forEach(type => pokemonTypes.push(type.type.name));
+      setPokemonType(pokemonTypes);
+      setPokemonData(toArray);
+      setCurrentId(toArray[0].id);
     } catch (err) {
       console.log(err);
     }
@@ -74,6 +141,14 @@ const App = () => {
 
   const handleClick = e => {
     getRandomPokemon();
+  };
+
+  const goToNextPokemon = () => {
+    getNextPokemon();
+  };
+
+  const goToPrevPokemon = () => {
+    getPrevPokemon();
   };
 
   return (
@@ -93,6 +168,10 @@ const App = () => {
       <button class="random" onClick={handleClick}>
         🔀 Surprise Me!
       </button>
+      <Pagination
+        goToNextPokemon={goToNextPokemon}
+        goToPrevPokemon={goToPrevPokemon}
+      />
       {pokemonData.map(data => {
         return (
           <div className="container">
