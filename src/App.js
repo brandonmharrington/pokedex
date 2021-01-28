@@ -46,12 +46,12 @@ const App = () => {
       const fetchPro = fetch(url);
       const res = await fetchPro;
       const data = await res.json();
+
       // push all pokemon to pokemonNames with an id
       for (let i = 0; i < data.results.length; i++) {
         pokemonNames[i] = data.results[i].name;
       }
 
-      console.log(pokemonNames);
       // fetch a random pokemon from pokemonNames
       const url2 = `https://pokeapi.co/api/v2/pokemon/${
         pokemonNames[random - 1]
@@ -155,13 +155,12 @@ const App = () => {
   return (
     <div className="tc">
       <h1 className="f2 white">Pokédex</h1>
-      <form className="pa2" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <label>
           <input
-            className="pa2 ba b--red"
             type="text"
-            placeholder="Enter pokémon name"
             onChange={handleChange}
+            placeholder="Enter pokemon name"
           />
         </label>
       </form>
